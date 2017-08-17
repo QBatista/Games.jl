@@ -479,9 +479,22 @@ Base.summary(g::NormalFormGame) =
            " ",
            split(string(typeof(g)), ".")[end])
 
-# TODO: add printout of payoff arrays
-function Base.show(io::IO, g::NormalFormGame)
-    print(io, summary(g))
+function Base.show(io::IO, g::NormalFormGame)   
+    println(io, summary(g))
+    if num_players(g) == 2
+        for player1_action = 1:num_actions(g.players[1])
+            row = []
+            for player2_action = 1:num_actions(g.players[2])
+                payoff_p1 = payoff_vector(g.players[1],
+                                          player2_action)[player1_action]
+                payoff_p2 = payoff_vector(g.players[2], 
+                                          player1_action)[player2_action]
+                append!(row, [[payoff_p1, payoff_p2]])
+            end
+            print(io, string("Row ", player1_action, ": "))
+            println(io, row)
+        end
+    end
 end
 
 function Base.getindex{N,T}(g::NormalFormGame{N,T},
