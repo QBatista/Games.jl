@@ -120,6 +120,25 @@
         @test is_nash(g, (2, 2))
     end
 
+    @testset "Strategic form" begin
+        matching_pennies_bimatrix = Array{Float64}(2, 2, 2)
+        matching_pennies_bimatrix[1, 1, :] = [1, -1]
+        matching_pennies_bimatrix[1, 2, :] = [-1, 1]
+        matching_pennies_bimatrix[2, 1, :] = [-1, 1]
+        matching_pennies_bimatrix[2, 2, :] = [1, -1]
+
+        g = NormalFormGame(matching_pennies_bimatrix)
+
+        test_buffer = IOBuffer(true, true)
+
+        show(test, g)
+
+        @test eval(String(take!(test))) ==
+         eval(string("2×2 NormalFormGame{2,Float64}\n",
+                     "Row 1: Any[[1.0, -1.0], [-1.0, 1.0]]\n",
+                     "Row 2: Any[[-1.0, 1.0], [1.0, -1.0]]\n"))    
+    end
+
     # Trivial cases with one player #
 
     @testset "Player with 0 opponents" begin
