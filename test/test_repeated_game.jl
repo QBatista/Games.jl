@@ -35,8 +35,6 @@
     end
 
     @testset "Testing subgradient and hyperplane level initialize" begin
-        C, H, Z = Games.initialize_sg_hpl(4, [0.0, 0.0], 1.0)
-
         @test maximum(abs, C - ones(4)) < 1e-12
         @test maximum(abs, H - Z') < 1e-12
     end
